@@ -1,0 +1,190 @@
+---
+import { sanityClient, urlFor } from '../lib/sanity';
+
+// Fetch live Sanity data, falling back to empty if not added yet
+let settings = null;
+let showcase = null;
+let galleryPhotos = [];
+
+try {
+  settings = await sanityClient.fetch(`*[_type == "siteSettings"][0]`);
+  showcase = await sanityClient.fetch(`*[_type == "showcase"][0]{
+    heading,
+    caption,
+    "videoUrl": videoFile.asset->url
+  }`);
+  galleryPhotos = await sanityClient.fetch(`*[_type == "galleryPhoto"] | order(order asc)`);
+} catch (e) {
+  console.log("Sanity fetch error (falling back to static defaults):", e);
+}
+
+// Static fallbacks
+const siteTitle = settings?.title || "DG PORTFOLIO";
+const heroSubtitle = settings?.heroSubtitle || "ARCHIVE // 35MM";
+const showcaseHeading = showcase?.heading || "Countless frames. One perspective.";
+const showcaseCaption = showcase?.caption || "Landscapes, portraits, street scenes, and macro shots. Each frame a captured memory, each one telling its own story.";
+const showcaseVideo = showcase?.videoUrl || "/images/video.mp4";
+
+const fallbackGallery = [
+  { title: "Urban Landscape, 2025", src: "/images/photo-2.jpg" },
+  { title: "Portrait Study, 2026", src: "/images/photo-3.jpg" },
+  { title: "Macro Details, 2024", src: "/images/photo-4.jpg" },
+  { title: "Street Scene, 2025", src: "/images/photo-5.jpg" },
+  { title: "Nature Abstract, 2026", src: "/images/photo-6.jpg" },
+  { title: "Horizon Line, 2023", src: "/images/hero.jpg?v=2" },
+];
+---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{siteTitle}</title>
+    <link rel="stylesheet" href="/style.css?v=20">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,300..700,0..100;1,9..144,300..700,0..100&family=Instrument+Sans:wght@400..650&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- SVG Filter for torn paper edge -->
+    <svg width="0" height="0" style="position: absolute; pointer-events: none;">
+        <filter id="torn-edge" x="-5%" y="-5%" width="110%" height="110%">
+            <feTurbulence type="fractalNoise" baseFrequency="0.03" numOctaves="3" result="noise" />
+            <feDisplacementMap in="SourceGraphic" in2="noise" scale="4" xChannelSelector="R" yChannelSelector="G" />
+        </filter>
+    </svg>
+
+    <header id="navbar">
+        <a href="#" class="logo" id="logo-link">
+            <span class="logo-icon"></span>
+            {siteTitle}
+        </a>
+        <button class="mobile-menu-btn" aria-label="Toggle Menu">
+            <svg viewBox="0 0 24 24" width="24" height="24" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
+        </button>
+        <nav id="nav-links">
+            <a href="#showcase">Showcase</a>
+            <a href="#introduction">Introduction</a>
+            <a href="#gallery">Gallery</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Intro Hero Section -->
+        <section id="hero-intro">
+            <div class="hero-panels-container">
+                <div class="panel panel-left torn-edges-mask" data-bg="/images/photo-1.jpg"></div>
+                <div class="panel panel-center">
+                    <div class="horizon-bg"></div>
+                    <div class="intro-text">{heroSubtitle}</div>
+                    <div class="main-title-container">
+                        <h1 class="main-title">Dario Gorgiev</h1>
+                        <h3>PHOTOGRAPHY</h3>
+                        <p class="subtitle">A personal portfolio showcasing my selected works.</p>
+                        <div class="toc">
+                            <a href="#showcase" class="toc-item"><span class="toc-num">01</span><span class="line"></span><span class="toc-name">Showcase</span></a>
+                            <a href="#introduction" class="toc-item"><span class="toc-num">02</span><span class="line"></span><span class="toc-name">Introduction</span></a>
+                            <a href="#gallery" class="toc-item"><span class="toc-num">03</span><span class="line"></span><span class="toc-name">Gallery</span></a>
+                            <a href="#contact" class="toc-item"><span class="toc-num">04</span><span class="line"></span><span class="toc-name">Contact</span></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-right torn-edges-mask" data-bg="/images/photo-1.jpg"></div>
+            </div>
+            <div class="scroll-down">Scroll down</div>
+        </section>
+
+        <!-- Section 2: Video/Featured image -->
+        <section id="showcase" class="section-dark" data-torn-top="#0b0b0b">
+            <div class="featured-content">
+                <p class="eyebrow">SHOWCASE</p>
+                <h2>{showcaseHeading}</h2>
+                <div class="torn-frame">
+                    <div class="torn-content">
+                        <video id="featured-video" src={showcaseVideo} autoplay muted loop playsinline class="showcase-video"></video>
+                        <button class="mute-btn" id="mute-toggle" aria-label="Toggle sound">
+                            <svg class="icon-mute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line></svg>
+                            <svg class="icon-unmute" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path></svg>
+                        </button>
+                    </div>
+                </div>
+                <p class="caption">{showcaseCaption}</p>
+            </div>
+        </section>
+
+        <!-- Section 3: Introduction -->
+        <section id="introduction" class="section-light" data-torn-top="#f4efeb">
+            <div class="container">
+                <p class="section-num">INTRODUCTION</p>
+                <h2>Today I am presenting my curated portfolio, a collection of moments frozen in time.</h2>
+                <div class="two-col-text">
+                    <p>Photography is more than just pressing a button. It is the art of seeing. Every image in this collection represents hours of patience, waiting for the perfect light, the right expression, the decisive moment. A conventional portfolio shows you a flat list of images. This collection shows you terrain: ridges with heights, valleys with depths, and a horizon you can orbit.</p>
+                    <p>It is the result of years of practice. Press the shutter for under a second, and it returns a memory accurate to half a micron, with true color, the lighting it was found in, and a place on the map.</p>
+                </div>
+                <div class="torn-frame-inline">
+                    <div class="torn-content">
+                        <img src="/images/portrait.jpg" alt="Photographer Portrait">
+                    </div>
+                </div>
+                <p class="caption-small">The photographer's camera, always ready for the next shot.</p>
+            </div>
+        </section>
+
+        <!-- Section 4: The Gallery -->
+        <section id="gallery" class="section-light">
+            <div class="container">
+                <p class="section-num">GALLERY</p>
+                <h2>One map of the visual world</h2>
+                <p class="intro-p">Every photo is a story. Browse the collection below to explore different themes and subjects. From sweeping vistas to macro details. You can walk from lichen on a Cairngorm boulder to frost on a Helsinki window without leaving a square millimetre.</p>
+                
+                <div class="gallery-grid">
+                    {galleryPhotos.length > 0 ? (
+                        galleryPhotos.map((photo) => (
+                            <div class="gallery-item">
+                                <div class="torn-content"><img src={urlFor(photo.image).width(1200).url()} alt={photo.title} /></div>
+                                <p class="gallery-caption">{photo.title}</p>
+                            </div>
+                        ))
+                    ) : (
+                        fallbackGallery.map((photo) => (
+                            <div class="gallery-item">
+                                <div class="torn-content"><img src={photo.src} alt={photo.title} /></div>
+                                <p class="gallery-caption">{photo.title}</p>
+                            </div>
+                        ))
+                    )}
+                </div>
+                
+                <div class="view-all-container">
+                    <a href="/gallery" class="btn-primary">View Full Collection</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5: Footer / Contact -->
+        <footer id="contact" class="section-dark footer-section footer-compact" data-torn-top="#0b0b0b">
+            <div class="container footer-compact-container">
+                <div class="footer-left">
+                    <span class="footer-label">Contact</span>
+                    <a href={`mailto:${settings?.contactEmail || 'studio@portfolio.art'}`} class="footer-link">{settings?.contactEmail || 'studio@portfolio.art'}</a>
+                    <span class="footer-phone">+389 72 303 764</span>
+                </div>
+                <div class="footer-right">
+                    <span class="footer-label">Social</span>
+                    <div class="footer-social-links">
+                        <a href="https://vsco.co" target="_blank" rel="noopener" class="footer-link">VSCO <span>↗</span></a>
+                        <a href="https://instagram.com" target="_blank" rel="noopener" class="footer-link">Instagram <span>↗</span></a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script is:inline src="/assets/torn.js"></script>
+    <script is:inline src="/script.js?v=13"></script>
+</body>
+</html>
