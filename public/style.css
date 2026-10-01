@@ -534,19 +534,21 @@ canvas.canvas-drawn {
 }
 
 .gallery-grid.gallery-grid-3 {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 4rem 3rem;
+    display: block;
+    column-count: 3;
+    column-gap: 3rem;
 }
 
 .gallery-grid.gallery-grid-3 .gallery-item {
-    width: calc(33.333% - 2rem);
+    width: 100%;
+    break-inside: avoid;
+    margin-bottom: 4rem;
+    display: inline-block; /* Helps with some browser bugs in columns */
 }
 
 @media (max-width: 900px) {
-    .gallery-grid.gallery-grid-3 .gallery-item {
-        width: calc(50% - 1.5rem);
+    .gallery-grid.gallery-grid-3 {
+        column-count: 2;
     }
 }
 
@@ -555,8 +557,11 @@ canvas.canvas-drawn {
         grid-template-columns: 1fr;
         gap: 3.5rem;
     }
+    .gallery-grid.gallery-grid-3 {
+        column-count: 1;
+    }
     .gallery-grid.gallery-grid-3 .gallery-item {
-        width: 100%;
+        margin-bottom: 3.5rem;
     }
 }
 
