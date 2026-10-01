@@ -132,3 +132,130 @@ function initTornPaper() {
 }
 
 window.addEventListener('DOMContentLoaded', initTornPaper);
+
+// Lightbox Logic
+window.addEventListener('DOMContentLoaded', () => {
+    const lightbox = document.getElementById('lightbox');
+    if (!lightbox) return;
+
+    const lightboxImg = document.getElementById('lightbox-img');
+    const lightboxContent = document.getElementById('lightbox-torn-content');
+    const closeBtn = document.getElementById('lightbox-close-btn');
+    const galleryItems = document.querySelectorAll('.gallery-item img');
+
+    let currentDraw = null;
+
+    function dprOf() { return Math.min(2, window.devicePixelRatio || 1); }
+
+    function drawLightboxTornFrame() {
+        if (!lightboxImg.complete) return;
+        
+        var w = lightboxContent.clientWidth;
+        var h = (lightboxImg.naturalHeight / lightboxImg.naturalWidth) * w;
+        if (!w || !h) return; 
+
+        var existingCanvas = lightboxContent.querySelector('.plate-canvas');
+        if (existingCanvas) existingCanvas.remove();
+
+        var c = document.createElement("canvas");
+        c.className = 'plate-canvas';
+        lightboxContent.appendChild(c);
+        
+        var pad = 24; 
+        var seed = 999;
+        var amp = 8;
+        
+        var seam = 1.3;
+        var fibres = 0.35;
+        var fibreLen = 0.65;
+        var shadow = { blur: 12, dx: 2, dy: 4, alpha: 0.20 };
+        var over = 2;
+        var d = dprOf();
+        
+        c.width = (w + 2 * pad) * d; c.height = (h + 2 * pad) * d; 
+        c.style.width = (w + 2 * pad) + "px"; c.style.height = (h + 2 * pad) + "px";
+        c.style.left = -pad + "px"; 
+        c.style.top = -pad + "px";
+        c.style.marginLeft = "0";
+        c.style.marginTop = "0";
+        c.style.position = "absolute";
+        
+        var x = c.getContext("2d"); 
+        x.setTransform(d, 0, 0, d, 0, 0); 
+        x.clearRect(0, 0, w + 2 * pad, h + 2 * pad);
+        
+        var s = Torn.rectScrap(pad, pad, w, h, seed, amp);
+        Torn.scrap(x, s.outline, s.edges, function (cc) { 
+            cc.drawImage(lightboxImg, pad - over, pad - over, w + over * 2, h + over * 2); 
+        }, { 
+            dpr: d, 
+            seam: seam, 
+            fibres: fibres, 
+            fibreLen: fibreLen,
+            shadow: shadow, 
+            seed: seed + 5 
+        });
+        lightboxContent.style.height = h + "px";
+        c.classList.add("canvas-drawn");
+    }
+
+    // Replace drawLightboxTornFrame on resize if lightbox is active
+    window.addEventListener('resize', () => {
+        if (lightbox.classList.contains('active')) {
+            drawLightboxTornFrame();
+        }
+    });
+
+    // Open lightbox on click
+    galleryItems.forEach(img => {
+        // add pointer cursor to images
+        img.parentElement.style.cursor = 'pointer';
+        
+        img.parentElement.addEventListener('click', (e) => {
+            // Get original higher resolution if possible by removing w= param, or just use src
+            let src = img.getAttribute('src');
+            if (src.includes('w=1200')) {
+                src = src.replace('w=1200', 'w=2000'); // request higher res for lightbox
+            }
+            lightboxImg.src = src;
+            lightbox.classList.add('active');
+            
+            // Wait for image to load before drawing frame
+            lightboxImg.onload = () => {
+                drawLightboxTornFrame();
+            };
+            // If already cached
+            if (lightboxImg.complete) {
+                drawLightboxTornFrame();
+            }
+        });
+    });
+
+    // Close lightbox
+    const closeLightbox = () => {
+        lightbox.classList.remove('active');
+        // Optional: clear src after transition
+        setTimeout(() => {
+            if (!lightbox.classList.contains('active')) {
+                lightboxImg.src = '';
+                const canvas = lightboxContent.querySelector('.plate-canvas');
+                if (canvas) canvas.remove();
+                lightboxContent.style.height = 'auto';
+            }
+        }, 400);
+    };
+
+    closeBtn.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox || e.target === document.querySelector('.lightbox-content')) {
+            closeLightbox();
+        }
+    });
+    
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+            closeLightbox();
+        }
+    });
+});

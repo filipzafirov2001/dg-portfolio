@@ -777,3 +777,92 @@ a.logo:hover {
         margin: 0;
     }
 }
+
+/* Lightbox Styles */
+.lightbox {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(11, 11, 11, 0.7);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+.lightbox.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 2rem;
+    right: 2rem;
+    z-index: 10000;
+    background: rgba(26, 26, 26, 0.4);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--text-color);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    padding: 0;
+}
+
+.lightbox-close:hover {
+    background: rgba(26, 26, 26, 0.6);
+    transform: scale(1.05);
+}
+
+.lightbox-content {
+    max-width: 90vw;
+    max-height: 90vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 36px; /* Space for torn overhang */
+}
+
+.lightbox-torn-content {
+    position: relative;
+}
+
+.lightbox-torn-content img {
+    max-width: 85vw;
+    max-height: 85vh;
+    object-fit: contain;
+    display: block;
+}
+
+/* Overrides for lightbox torn content so it sizes correctly based on the image */
+.lightbox-torn-content {
+    position: relative;
+    width: auto;
+    height: auto;
+    background: transparent;
+}
+.lightbox-torn-content img {
+    position: relative;
+    opacity: 0.001; /* hide the actual img so only canvas is visible */
+    width: auto;
+    height: auto;
+    max-width: 85vw;
+    max-height: 85vh;
+    object-fit: contain;
+    display: block;
+}
