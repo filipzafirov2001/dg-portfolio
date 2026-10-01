@@ -6,7 +6,17 @@ let settings = null;
 
 try {
   settings = await sanityClient.fetch(`*[_type == "siteSettings"][0]`);
-  archivePhotos = await sanityClient.fetch(`*[_type == "archivePhoto"]`);
+  const archiveDoc = await sanityClient.fetch(`*[_type == "archiveGallery"][0]{
+    photos[]{
+      ...,
+      "asset": asset->
+    }
+  }`);
+  if (archiveDoc?.photos && archiveDoc.photos.length > 0) {
+    archivePhotos = archiveDoc.photos;
+  } else {
+    archivePhotos = await sanityClient.fetch(`*[_type == "archivePhoto"]`);
+  }
 } catch (e) {
   console.log("Sanity fetch error:", e);
 }
@@ -86,7 +96,7 @@ const fallbackArchive = [
                     {archivePhotos.length > 0 ? (
                         archivePhotos.map((photo) => (
                             <div class="gallery-item">
-                                <div class="torn-content"><img src={urlFor(photo.image).width(1200).url()} alt={photo.title} /></div>
+                                <div class="torn-content"><img src={urlFor(photo.image || photo).width(1200).url()} alt={photo.title || "Archive"} /></div>
                                 <p class="gallery-caption">{photo.title}</p>
                             </div>
                         ))
