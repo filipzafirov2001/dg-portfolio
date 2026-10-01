@@ -13,7 +13,7 @@ try {
     caption,
     "videoUrl": videoFile.asset->url
   }`);
-  const homeDoc = await sanityClient.fetch(`*[_type == "homeGallery"][0]{
+  const homeDoc = await sanityClient.fetch(`*[_type == "homeGallery" && defined(photos) && count(photos) > 0] | order(_updatedAt desc)[0]{
     photos[]{
       ...,
       "asset": asset->

@@ -6,14 +6,22 @@ let settings = null;
 
 try {
   settings = await sanityClient.fetch(`*[_type == "siteSettings"][0]`);
-  const archiveDoc = await sanityClient.fetch(`*[_type == "archiveGallery"][0]{
+  const archiveDocs = await sanityClient.fetch(`*[_type == "archiveGallery" && defined(photos) && count(photos) > 0] | order(_updatedAt desc){
     photos[]{
       ...,
       "asset": asset->
     }
   }`);
-  if (archiveDoc?.photos && archiveDoc.photos.length > 0) {
-    archivePhotos = archiveDoc.photos;
+  let allPhotos = [];
+  if (archiveDocs && archiveDocs.length > 0) {
+    for (const doc of archiveDocs) {
+      if (doc.photos && Array.isArray(doc.photos)) {
+        allPhotos = allPhotos.concat(doc.photos);
+      }
+    }
+  }
+  if (allPhotos.length > 0) {
+    archivePhotos = allPhotos;
   } else {
     archivePhotos = await sanityClient.fetch(`*[_type == "archivePhoto"]`);
   }
