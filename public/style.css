@@ -558,10 +558,11 @@ canvas.canvas-drawn {
         gap: 3.5rem;
     }
     .gallery-grid.gallery-grid-3 {
-        column-count: 1;
+        column-count: 2;
+        column-gap: 1.5rem;
     }
     .gallery-grid.gallery-grid-3 .gallery-item {
-        margin-bottom: 3.5rem;
+        margin-bottom: 1.5rem;
     }
 }
 
