@@ -943,4 +943,17 @@ a.logo:hover {
         font-size: 2rem;
         margin-bottom: 2rem;
     }
+    #showcase {
+        padding: 5rem 1rem;
+    }
+    .mute-btn {
+        bottom: 1rem;
+        right: 1rem;
+        width: 40px;
+        height: 40px;
+    }
+    .mute-btn svg {
+        width: 18px;
+        height: 18px;
+    }
 }
