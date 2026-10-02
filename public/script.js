@@ -39,11 +39,16 @@ heroTimeline.to(".panel-center", {
     ease: "power2.inOut"
 }, 0);
 
-// Fade out "Introducing" text
-heroTimeline.to(".intro-text", {
-    opacity: 0,
-    scale: 0.9,
-    ease: "power2.out"
+// Drop down polaroid frame (masked)
+heroTimeline.to(".polaroid-drop", {
+    yPercent: 150,
+    ease: "power2.inOut"
+}, 0);
+
+// Straighten polaroid frame as it drops
+heroTimeline.to(".polaroid-frame", {
+    rotation: 1,
+    ease: "power2.inOut"
 }, 0);
 
 // Fade in main title
@@ -141,8 +146,8 @@ function drawPlates() {
             var d = dprOf(), w = fig.clientWidth, h = w * mediaH / mediaW;
             if (w === 0) return; // Not visible yet
             
-            var pad = isGallery ? 24 : 36;
-            var amp = isGallery ? 2.0 : 3.6;
+            var pad = isGallery ? 12 : 36;
+            var amp = isGallery ? 4.0 : 3.6;
             var seam = isGallery ? 1.3 : 2.6;
             var fibres = isGallery ? 0.35 : 0.55;
             var fibreLen = isGallery ? 0.65 : 1.0;
