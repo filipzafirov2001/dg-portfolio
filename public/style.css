@@ -122,6 +122,7 @@ nav a:hover {
 /* Hero Section */
 #hero-intro {
     height: 100vh;
+    height: 100svh; /* Use small viewport height to keep above mobile URL bars */
     width: 100%;
     position: relative;
     overflow: hidden;
@@ -258,6 +259,9 @@ canvas.canvas-drawn {
     .polaroid-frame {
         width: 160px;
         padding: 8px 8px 32px 8px;
+    }
+    .scroll-down {
+        bottom: 6rem; /* Push higher to avoid URL bar overlap */
     }
 }
 
