@@ -221,10 +221,13 @@ function drawHeroPanels() {
         c.style.top = '0'; c.style.left = '0';
         panel.appendChild(c);
         
+        let lastW = 0;
         function draw() {
             if (!img.complete || !img.naturalWidth) return;
             var d = dprOf(), w = panel.clientWidth, h = panel.clientHeight;
             if (w === 0 || h === 0) return;
+            if (w === lastW) return;
+            lastW = w;
             
             let pad = 60; // Extra space for tear and shadow
             c.width = (w + pad) * d; c.height = h * d; 
