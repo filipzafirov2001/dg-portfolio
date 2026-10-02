@@ -513,6 +513,7 @@ window.addEventListener('DOMContentLoaded', () => {
                 const canvas = lightboxContent.querySelector('.plate-canvas');
                 if (canvas) canvas.remove();
                 lightboxContent.style.height = 'auto';
+                lastLightboxW = 0; // Reset so it redraws on next open
             }
         }, 400);
     };
