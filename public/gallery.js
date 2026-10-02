@@ -26,6 +26,7 @@ function initTornPaper() {
     document.querySelectorAll('[data-torn-top]').forEach((el, i) => {
         let color = el.getAttribute('data-torn-top');
         let seed = 101 + i * 17;
+        let lastW = 0;
         
         let c = document.createElement("canvas");
         c.className = "torn-top";
@@ -35,6 +36,8 @@ function initTornPaper() {
         function draw() {
             var d = dprOf(), w = el.clientWidth, h = 70;
             if (w === 0) return;
+            if (w === lastW) return;
+            lastW = w;
             c.width = w * d;
             c.height = h * d;
             c.style.height = h + "px";
@@ -74,11 +77,14 @@ function initTornPaper() {
             if (!img) return;
             
             var fixedSeed = 500 + idx * 42; // Consistent seed per image
+            var lastW = 0;
 
             function draw() {
                 var w = container.clientWidth;
                 var h = (img.naturalHeight / img.naturalWidth) * w;
                 if (!w || !h) return; // Wait until loaded
+                if (w === lastW) return; // Skip if width hasn't changed (prevents mobile scroll flash)
+                lastW = w;
 
                 // If already has canvas, remove it before drawing a new one on resize
                 var existingCanvas = container.querySelector('.plate-canvas');
@@ -147,12 +153,16 @@ window.addEventListener('DOMContentLoaded', () => {
 
     function dprOf() { return Math.min(2, window.devicePixelRatio || 1); }
 
+    let lastLightboxW = 0;
+
     function drawLightboxTornFrame() {
         if (!lightboxImg.complete) return;
         
         var w = lightboxContent.clientWidth;
         var h = (lightboxImg.naturalHeight / lightboxImg.naturalWidth) * w;
         if (!w || !h) return; 
+        if (w === lastLightboxW) return;
+        lastLightboxW = w;
 
         var existingCanvas = lightboxContent.querySelector('.plate-canvas');
         if (existingCanvas) existingCanvas.remove();

@@ -137,6 +137,7 @@ function drawPlates() {
         fig.appendChild(c);
         
         let rafId;
+        let lastW = 0;
 
         function draw() {
             let mediaW = isVideo ? media.videoWidth : media.naturalWidth;
@@ -145,6 +146,8 @@ function drawPlates() {
             
             var d = dprOf(), w = fig.clientWidth, h = w * mediaH / mediaW;
             if (w === 0) return; // Not visible yet
+            if (w === lastW && !isVideo) return; // Skip if width hasn't changed (allow video to redraw via RAF)
+            lastW = w;
             
             var pad = isGallery ? 12 : 36;
             var amp = isGallery ? 4.0 : 3.6;
@@ -286,6 +289,7 @@ function initTornTops() {
     document.querySelectorAll('[data-torn-top]').forEach((el, i) => {
         let color = el.getAttribute('data-torn-top');
         let seed = 101 + i * 17;
+        let lastW = 0;
         
         let c = document.createElement("canvas");
         c.className = "torn-top";
@@ -295,6 +299,8 @@ function initTornTops() {
         function draw() {
             var d = dprOf(), w = el.clientWidth, h = 70;
             if (w === 0) return;
+            if (w === lastW) return;
+            lastW = w;
             c.width = w * d;
             c.height = h * d;
             c.style.height = h + "px";
@@ -412,12 +418,16 @@ window.addEventListener('DOMContentLoaded', () => {
 
     function dprOf() { return Math.min(2, window.devicePixelRatio || 1); }
 
+    let lastLightboxW = 0;
+
     function drawLightboxTornFrame() {
         if (!lightboxImg.complete) return;
         
         var w = lightboxContent.clientWidth;
         var h = (lightboxImg.naturalHeight / lightboxImg.naturalWidth) * w;
         if (!w || !h) return; 
+        if (w === lastLightboxW) return;
+        lastLightboxW = w;
 
         var existingCanvas = lightboxContent.querySelector('.plate-canvas');
         if (existingCanvas) existingCanvas.remove();
