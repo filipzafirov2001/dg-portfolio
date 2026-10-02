@@ -252,6 +252,9 @@ canvas.canvas-drawn {
         width: 70vw;
         left: 15vw;
     }
+    .horizon-bg {
+        left: -15vw;
+    }
     .polaroid-frame {
         width: 160px;
         padding: 8px 8px 32px 8px;
