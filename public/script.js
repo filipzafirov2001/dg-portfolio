@@ -69,7 +69,9 @@ heroTimeline.to(".scroll-down", {
 // Setup initial state for main title container
 gsap.set(".main-title-container", {
     scale: 1.1,
-    autoAlpha: 0
+    autoAlpha: 0,
+    xPercent: -50,
+    yPercent: -50
 });
 
 // Navbar visibility - stays visible from #featured all the way to bottom
