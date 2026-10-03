@@ -555,7 +555,7 @@ canvas.canvas-drawn {
 }
 
 .intro-right p:first-child {
-    margin-top: 0;
+    margin-top: 24px; /* visually aligns with the 24px padded photo frame */
 }
 
 @media (max-width: 768px) {
@@ -567,7 +567,7 @@ canvas.canvas-drawn {
 .torn-frame-inline {
     opacity: 0;
     background: transparent;
-    padding: 36px; /* precisely matches canvas overhang to align visually */
+    padding: 24px; /* restores original image size */
     margin-bottom: 1rem;
     box-shadow: none;
 }
