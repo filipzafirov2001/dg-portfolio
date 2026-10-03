@@ -587,24 +587,27 @@ canvas.canvas-drawn {
 }
 
 .gallery-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 3rem 4rem;
+    display: block;
+    column-count: 2;
+    column-gap: 4rem;
     margin-bottom: 4rem;
     width: 100%;
 }
 
+.gallery-grid .gallery-item {
+    width: 100%;
+    break-inside: avoid;
+    margin-bottom: 3rem;
+    display: inline-block; /* Helps with some browser bugs in columns */
+}
+
 .gallery-grid.gallery-grid-3 {
-    display: block;
     column-count: 3;
     column-gap: 3rem;
 }
 
 .gallery-grid.gallery-grid-3 .gallery-item {
-    width: 100%;
-    break-inside: avoid;
     margin-bottom: 4rem;
-    display: inline-block; /* Helps with some browser bugs in columns */
 }
 
 @media (max-width: 900px) {
@@ -615,14 +618,10 @@ canvas.canvas-drawn {
 
 @media (max-width: 768px) {
     .gallery-grid {
-        grid-template-columns: 1fr 1fr;
-        gap: 1.5rem;
-    }
-    .gallery-grid.gallery-grid-3 {
         column-count: 2;
         column-gap: 1.5rem;
     }
-    .gallery-grid.gallery-grid-3 .gallery-item {
+    .gallery-grid .gallery-item {
         margin-bottom: 1.5rem;
     }
 }
