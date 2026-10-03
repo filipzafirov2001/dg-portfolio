@@ -1,51 +1,54 @@
 ---
 import { sanityClient, urlFor } from '../lib/sanity';
 
-// Fetch live Sanity data, falling back to empty if not added yet
 let settings = null;
-let showcase = null;
-let galleryPhotos = [];
+let home = null;
 
 try {
-  settings = await sanityClient.fetch(`*[_type == "siteSettings"][0]{
+  settings = await sanityClient.fetch(`*[_type == "siteSettings"][0]`);
+  home = await sanityClient.fetch(`*[_type == "pageHome"][0]{
     ...,
-    "polaroidUrl": heroPolaroid.asset->url
-  }`);
-  showcase = await sanityClient.fetch(`*[_type == "showcase"][0]{
-    heading,
-    caption,
-    "videoUrl": videoFile.asset->url
-  }`);
-  const homeDoc = await sanityClient.fetch(`*[_type == "homeGallery" && defined(photos) && count(photos) > 0] | order(_updatedAt desc)[0]{
-    photos[]{
-      ...,
+    "polaroidUrl": heroPolaroid.asset->url,
+    "videoUrl": showcaseVideo.asset->url,
+    "introImageUrl": introImage.asset->url,
+    galleryPhotos[]{
+      title,
       "asset": asset->
     }
   }`);
-  if (homeDoc?.photos && homeDoc.photos.length > 0) {
-    galleryPhotos = homeDoc.photos;
-  } else {
-    galleryPhotos = await sanityClient.fetch(`*[_type == "galleryPhoto"] | order(order asc)`);
-  }
 } catch (e) {
-  console.log("Sanity fetch error (falling back to static defaults):", e);
+  console.error("Sanity fetch error (falling back to static defaults):", e);
 }
 
-// Static fallbacks
-const siteTitle = settings?.title || "DG PHOTOGRAPHY";
-const heroSubtitle = settings?.heroSubtitle || "ARCHIVE // 35MM";
-const showcaseHeading = showcase?.heading || "Countless frames. One perspective.";
-const showcaseCaption = showcase?.caption || "Landscapes, portraits, street scenes, and macro shots. Each frame a captured memory, each one telling its own story.";
-const showcaseVideo = showcase?.videoUrl || "/images/video.mp4";
-const polaroidImg = settings?.polaroidUrl || "/images/portrait.jpg";
+// Fallback values in case Sanity document isn't published yet
+const siteTitle = settings?.title || 'DG PHOTOGRAPHY';
+const contactEmail = settings?.contactEmail || 'studio@portfolio.art';
+const instagramUrl = settings?.instagramUrl || 'https://www.instagram.com/d_gorgiev_photo/';
 
-const fallbackGallery = [
-  { title: "Urban Landscape, 2025", src: "/images/photo-2.jpg" },
-  { title: "Portrait Study, 2026", src: "/images/photo-3.jpg" },
-  { title: "Macro Details, 2024", src: "/images/photo-4.jpg" },
-  { title: "Street Scene, 2025", src: "/images/photo-5.jpg" },
-  { title: "Nature Abstract, 2026", src: "/images/photo-6.jpg" },
-  { title: "Horizon Line, 2023", src: "/images/hero.jpg?v=2" },
+const heroTitle = home?.heroTitle || 'Dario Gorgiev';
+const heroSubtitle = home?.heroSubtitle || 'PHOTOGRAPHY';
+const heroDesc = home?.heroDescription || 'A personal portfolio showcasing my selected works.';
+const heroPolaroid = home?.polaroidUrl || '/images/portrait.jpg';
+
+const showcaseHeading = home?.showcaseHeading || 'Cinematic perspectives from the field';
+const showcaseCaption = home?.showcaseCaption || 'A short visual reel capturing the atmosphere and tone of my recent analog work.';
+const showcaseVideo = home?.videoUrl || '/images/showcase.mp4';
+
+const introHeading = home?.introHeading || 'Today I am presenting my curated portfolio, a collection of moments frozen in time.';
+const introImageUrl = home?.introImageUrl || '/images/portrait.jpg';
+const introCaption = home?.introImageCaption || "The photographer's camera, always ready for the next shot.";
+const introText1 = home?.introText1 || 'Photography is more than just pressing a button. It is the art of seeing. Every image in this collection represents hours of patience, waiting for the perfect light, the right expression, the decisive moment. A conventional portfolio shows you a flat list of images. This collection shows you terrain: ridges with heights, valleys with depths, and a horizon you can orbit.';
+const introText2 = home?.introText2 || 'It is the result of years of practice. Press the shutter for under a second, and it returns a memory accurate to half a micron, with true color, the lighting it was found in, and a place on the map.';
+
+const galleryHeading = home?.galleryHeading || 'One map of the visual world';
+const galleryDesc = home?.galleryDescription || 'Every photo is a story. Browse the collection below to explore different themes and subjects. From sweeping vistas to macro details. You can walk from lichen on a Cairngorm boulder to frost on a Helsinki window without leaving a square millimetre.';
+const galleryPhotos = home?.galleryPhotos || [
+  { src: '/images/photo-1.jpg', title: 'Frost & Fern' },
+  { src: '/images/photo-2.jpg', title: 'Mountain Pass' },
+  { src: '/images/photo-3.jpg', title: 'Urban Symmetry' },
+  { src: '/images/photo-4.jpg', title: 'Morning Light' },
+  { src: '/images/photo-5.jpg', title: 'The Red Cabin' },
+  { src: '/images/photo-6.jpg', title: 'Coastal Waves' }
 ];
 ---
 
@@ -95,14 +98,14 @@ const fallbackGallery = [
                     <div class="polaroid-wrapper">
                         <div class="polaroid-drop">
                             <div class="polaroid-frame">
-                                <img src={polaroidImg} alt="Photographer Portrait">
+                                <img src={heroPolaroid} alt="Hero Polaroid">
                             </div>
                         </div>
                     </div>
                     <div class="main-title-container">
-                        <h1 class="main-title">Dario Gorgiev</h1>
-                        <h3>PHOTOGRAPHY</h3>
-                        <p class="subtitle">A personal portfolio showcasing my selected works.</p>
+                        <h1 class="main-title">{heroTitle}</h1>
+                        <h3>{heroSubtitle}</h3>
+                        <p class="subtitle">{heroDesc}</p>
                         <div class="toc">
                             <a href="#showcase" class="toc-item"><span class="toc-num">01</span><span class="line"></span><span class="toc-name">Showcase</span></a>
                             <a href="#introduction" class="toc-item"><span class="toc-num">02</span><span class="line"></span><span class="toc-name">Introduction</span></a>
@@ -140,19 +143,19 @@ const fallbackGallery = [
         <section id="introduction" class="section-light" data-torn-top="#f4efeb">
             <div class="container">
                 <p class="section-num">INTRODUCTION</p>
-                <h2>Today I am presenting my curated portfolio, a collection of moments frozen in time.</h2>
+                <h2>{introHeading}</h2>
                 <div class="intro-layout">
                     <div class="intro-left">
                         <div class="torn-frame-inline">
                             <div class="torn-content">
-                                <img src="/images/portrait.jpg" alt="Photographer Portrait">
+                                <img src={introImageUrl} alt="Introduction Image">
                             </div>
                         </div>
-                        <p class="caption-small">The photographer's camera, always ready for the next shot.</p>
+                        <p class="caption-small">{introCaption}</p>
                     </div>
                     <div class="intro-right">
-                        <p>Photography is more than just pressing a button. It is the art of seeing. Every image in this collection represents hours of patience, waiting for the perfect light, the right expression, the decisive moment. A conventional portfolio shows you a flat list of images. This collection shows you terrain: ridges with heights, valleys with depths, and a horizon you can orbit.</p>
-                        <p>It is the result of years of practice. Press the shutter for under a second, and it returns a memory accurate to half a micron, with true color, the lighting it was found in, and a place on the map.</p>
+                        <p>{introText1}</p>
+                        <p>{introText2}</p>
                     </div>
                 </div>
             </div>
@@ -162,19 +165,19 @@ const fallbackGallery = [
         <section id="gallery" class="section-light">
             <div class="container">
                 <p class="section-num">GALLERY</p>
-                <h2>One map of the visual world</h2>
-                <p class="intro-p">Every photo is a story. Browse the collection below to explore different themes and subjects. From sweeping vistas to macro details. You can walk from lichen on a Cairngorm boulder to frost on a Helsinki window without leaving a square millimetre.</p>
+                <h2>{galleryHeading}</h2>
+                <p class="intro-p">{galleryDesc}</p>
                 
                 <div class="gallery-grid">
-                    {galleryPhotos.length > 0 ? (
+                    {home?.galleryPhotos ? (
                         galleryPhotos.map((photo) => (
                             <div class="gallery-item">
-                                <div class="torn-content"><img src={urlFor(photo.image || photo).width(1200).url()} alt={photo.title || "Gallery"} /></div>
+                                <div class="torn-content"><img src={urlFor(photo.asset).width(1200).url()} alt={photo.title || "Gallery"} /></div>
                                 <p class="gallery-caption">{photo.title}</p>
                             </div>
                         ))
                     ) : (
-                        fallbackGallery.map((photo) => (
+                        galleryPhotos.map((photo) => (
                             <div class="gallery-item">
                                 <div class="torn-content"><img src={photo.src} alt={photo.title} /></div>
                                 <p class="gallery-caption">{photo.title}</p>
@@ -194,13 +197,13 @@ const fallbackGallery = [
             <div class="container footer-compact-container">
                 <div class="footer-left">
                     <span class="footer-label">Contact</span>
-                    <a href={`mailto:${settings?.contactEmail || 'studio@portfolio.art'}`} class="footer-link">{settings?.contactEmail || 'studio@portfolio.art'}</a>
+                    <a href={`mailto:${contactEmail}`} class="footer-link">{contactEmail}</a>
                     <span class="footer-phone">+389 72 303 764</span>
                 </div>
                 <div class="footer-right">
                     <span class="footer-label">Social</span>
                     <div class="footer-social-links">
-                        <a href="https://www.instagram.com/d_gorgiev_photo/" target="_blank" rel="noopener" class="footer-link">Instagram <span>↗</span></a>
+                        <a href={instagramUrl} target="_blank" rel="noopener" class="footer-link">Instagram <span>↗</span></a>
                     </div>
                 </div>
             </div>

@@ -1,6 +1,5 @@
 import siteSettings from './siteSettings'
-import showcase from './showcase'
-import homeGallery from './homeGallery'
-import archiveGallery from './archiveGallery'
+import pageHome from './pageHome'
+import pageArchive from './pageArchive'
 
-export const schemaTypes = [siteSettings, showcase, homeGallery, archiveGallery]
+export const schemaTypes = [siteSettings, pageHome, pageArchive]

@@ -3,33 +3,30 @@ import { sanityClient, urlFor } from '../lib/sanity';
 
 let archivePhotos = [];
 let settings = null;
+let archive = null;
 
 try {
   settings = await sanityClient.fetch(`*[_type == "siteSettings"][0]`);
-  const archiveDocs = await sanityClient.fetch(`*[_type == "archiveGallery" && defined(photos) && count(photos) > 0] | order(_updatedAt desc){
+  archive = await sanityClient.fetch(`*[_type == "pageArchive"][0]{
+    ...,
     photos[]{
       ...,
       "asset": asset->
     }
   }`);
-  let allPhotos = [];
-  if (archiveDocs && archiveDocs.length > 0) {
-    for (const doc of archiveDocs) {
-      if (doc.photos && Array.isArray(doc.photos)) {
-        allPhotos = allPhotos.concat(doc.photos);
-      }
-    }
-  }
-  if (allPhotos.length > 0) {
-    archivePhotos = allPhotos;
-  } else {
-    archivePhotos = await sanityClient.fetch(`*[_type == "archivePhoto"]`);
+  if (archive?.photos && archive.photos.length > 0) {
+    archivePhotos = archive.photos;
   }
 } catch (e) {
   console.log("Sanity fetch error:", e);
 }
 
 const siteTitle = settings?.title || "DG PHOTOGRAPHY";
+const contactEmail = settings?.contactEmail || 'studio@portfolio.art';
+const instagramUrl = settings?.instagramUrl || 'https://www.instagram.com/d_gorgiev_photo/';
+
+const pageTitle = archive?.title || 'Full Collection';
+const pageSubtitle = archive?.subtitle || 'A comprehensive series of selected frames, medium formats, and studies.';
 
 const fallbackArchive = [
   { title: "Urban Landscape, 2025", src: "/images/photo-2.jpg" },
@@ -96,8 +93,8 @@ const fallbackArchive = [
             <div class="container container-wide">
                 <div class="gallery-page-header">
                     <p class="section-num">THE ARCHIVE</p>
-                    <h1>Full Collection</h1>
-                    <p>A comprehensive series of selected frames, medium formats, and studies.</p>
+                    <h1>{pageTitle}</h1>
+                    <p>{pageSubtitle}</p>
                 </div>
                 
                 <div class="gallery-grid gallery-grid-3">
@@ -125,13 +122,13 @@ const fallbackArchive = [
             <div class="container footer-compact-container">
                 <div class="footer-left">
                     <span class="footer-label">Contact</span>
-                    <a href={`mailto:${settings?.contactEmail || 'studio@portfolio.art'}`} class="footer-link">{settings?.contactEmail || 'studio@portfolio.art'}</a>
+                    <a href={`mailto:${contactEmail}`} class="footer-link">{contactEmail}</a>
                     <span class="footer-phone">+389 72 303 764</span>
                 </div>
                 <div class="footer-right">
                     <span class="footer-label">Social</span>
                     <div class="footer-social-links">
-                        <a href="https://www.instagram.com/d_gorgiev_photo/" target="_blank" rel="noopener" class="footer-link">Instagram <span>↗</span></a>
+                        <a href={instagramUrl} target="_blank" rel="noopener" class="footer-link">Instagram <span>↗</span></a>
                     </div>
                 </div>
             </div>
