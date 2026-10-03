@@ -554,6 +554,10 @@ canvas.canvas-drawn {
     margin-bottom: 1.5rem;
 }
 
+.intro-right p:first-child {
+    margin-top: 0;
+}
+
 @media (max-width: 768px) {
     .intro-layout {
         grid-template-columns: 1fr;
@@ -563,7 +567,7 @@ canvas.canvas-drawn {
 .torn-frame-inline {
     opacity: 0;
     background: transparent;
-    padding: 24px; /* accommodates torn paper canvas overhang */
+    padding: 36px; /* precisely matches canvas overhang to align visually */
     margin-bottom: 1rem;
     box-shadow: none;
 }
