@@ -79,7 +79,7 @@ gsap.set(".main-title-container", {
     yPercent: -50
 });
 
-// Navbar visibility - stays visible from #featured all the way to bottom
+// Navbar visibility - stays visible from #showcase all the way to bottom
 ScrollTrigger.create({
     trigger: "#showcase",
     start: "top 80%",
@@ -97,15 +97,15 @@ ScrollTrigger.create({
 // Image Reveal Animations on Scroll
 gsap.utils.toArray('.torn-frame, .torn-frame-inline, .gallery-item').forEach((elem) => {
     gsap.fromTo(elem, 
-        { y: 50, opacity: 0 },
+        { y: 40, opacity: 0 },
         {
             y: 0,
             opacity: 1,
-            duration: 1,
+            duration: 0.8,
             ease: "power3.out",
             scrollTrigger: {
                 trigger: elem,
-                start: "top 85%", // Trigger when top of element hits 85% of viewport
+                start: "top 92%", // Trigger earlier as element approaches viewport
                 toggleActions: "play none none reverse"
             }
         }
@@ -138,10 +138,6 @@ function drawPlates() {
         fig.style.boxShadow = 'none';
         fig.style.padding = '0';
         
-        let parent = fig.parentElement;
-        if (parent && (parent.classList.contains('torn-frame') || parent.classList.contains('torn-frame-inline'))) {
-        }
-
         fig.appendChild(c);
         
         let rafId;

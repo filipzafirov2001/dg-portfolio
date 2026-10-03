@@ -40,6 +40,14 @@ export default defineType({
       group: 'hero',
       options: { hotspot: true }
     }),
+    defineField({
+      name: 'heroBackdrop',
+      title: 'Hero Backdrop Image',
+      description: 'Background image revealed behind the hero panels as you scroll',
+      type: 'image',
+      group: 'hero',
+      options: { hotspot: true }
+    }),
     
     // --- SHOWCASE ---
     defineField({
@@ -91,14 +99,14 @@ export default defineType({
       title: 'Paragraph 1',
       type: 'text',
       group: 'intro',
-      placeholder: 'Photography is more than just pressing a button. It is the art of seeing. Every image in this collection represents hours of patience, waiting for the perfect light, the right expression, the decisive moment. A conventional portfolio shows you a flat list of images. This collection shows you terrain: ridges with heights, valleys with depths, and a horizon you can orbit.'
+      placeholder: 'Photography is more than just pressing a button; it is the art of seeing and preserving atmosphere. Every frame in this collection represents patience—waiting for the perfect light, the subtle gesture, and the quiet harmony between subject and space. Rather than a flat sequence of pictures, these series capture the tactile weight of each environment and moment.'
     }),
     defineField({
       name: 'introText2',
       title: 'Paragraph 2',
       type: 'text',
       group: 'intro',
-      placeholder: 'It is the result of years of practice. Press the shutter for under a second, and it returns a memory accurate to half a micron, with true color, the lighting it was found in, and a place on the map.'
+      placeholder: 'Rooted in analog disciplines and refined through digital precision, each study explores texture, depth, and shadow. A single shutter release condenses natural light, genuine emotion, and the stillness of time into an enduring visual narrative.'
     }),
 
     // --- GALLERY ---
@@ -107,14 +115,14 @@ export default defineType({
       title: 'Gallery Heading',
       type: 'string',
       group: 'gallery',
-      placeholder: 'One map of the visual world'
+      placeholder: 'Selected Works & Studies'
     }),
     defineField({
       name: 'galleryDescription',
       title: 'Gallery Description',
       type: 'text',
       group: 'gallery',
-      placeholder: 'Every photo is a story. Browse the collection below to explore different themes and subjects. From sweeping vistas to macro details. You can walk from lichen on a Cairngorm boulder to frost on a Helsinki window without leaving a square millimetre.'
+      placeholder: 'Every photo holds a story. Explore selected captures spanning natural landscapes, architecture, and fleeting moments from recent series.'
     }),
     defineField({
       name: 'galleryPhotos',

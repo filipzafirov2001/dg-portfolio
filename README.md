@@ -1,43 +1,67 @@
-# Astro Starter Kit: Minimal
+# DG Photography Portfolio
 
-```sh
-npm create astro@latest -- --template minimal
-```
+A photography portfolio website built with [Astro](https://astro.build), [Sanity CMS](https://www.sanity.io), and [GSAP](https://greensock.com/gsap/). Features procedural canvas-based torn paper collage styling, smooth scroll-triggered hero transitions, responsive masonry gallery layouts, and a lightbox preview.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
-
-## 🚀 Project Structure
-
-Inside of your Astro project, you'll see the following folders and files:
+## 📁 Project Structure
 
 ```text
-/
+site/
 ├── public/
+│   ├── assets/
+│   │   └── torn.js         # Procedural canvas torn paper generator
+│   ├── images/             # Static fallback photography & video assets
+│   ├── gallery.js          # Archive gallery interactions & lightbox
+│   ├── script.js           # Main landing page animations & GSAP triggers
+│   └── style.css           # Global portfolio stylesheet
 ├── src/
+│   ├── lib/
+│   │   └── sanity.ts       # Sanity client & image URL builder
 │   └── pages/
-│       └── index.astro
-└── package.json
+│       ├── index.astro     # Landing page (Hero, Showcase, Intro, Featured Gallery)
+│       └── gallery.astro   # Full archive collection page
+└── dg-portfolio/           # Sanity Studio CMS
+    └── schemaTypes/        # Schemas for site settings, home, and archive
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+## 🚀 Getting Started
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+### Prerequisites
+- Node.js (v18+ recommended)
+- npm
 
-Any static assets, like images, can be placed in the `public/` directory.
+### 1. Website (Astro)
 
-## 🧞 Commands
+From the `site/` directory:
 
-All commands are run from the root of the project, from a terminal:
+```bash
+# Install dependencies
+npm install
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+# Start development server
+npm run dev
 
-## 👀 Want to learn more?
+# Build for production
+npm run build
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+# Preview production build locally
+npm run preview
+```
+
+### 2. Content Studio (Sanity)
+
+From the `site/dg-portfolio/` directory:
+
+```bash
+# Install studio dependencies
+npm install
+
+# Start Sanity Studio locally
+npm run dev
+```
+
+## 🛠 Features
+
+- **Procedural Torn Paper Effect**: HTML5 canvas drawing for paper edge fibers, seams, and drop shadows with zero PNG masks.
+- **GSAP Scroll Pinning**: Cinematic multi-panel hero opening with polaroid drop animation.
+- **Sanity CMS Integration**: Manage portfolio photos, showcase video, artist statement, and site settings with fallback support.
+- **Full Collection Archive**: Responsive multi-column masonry gallery with torn-edge lightbox preview.

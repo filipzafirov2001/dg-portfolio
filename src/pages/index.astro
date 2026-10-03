@@ -9,6 +9,7 @@ try {
   home = await sanityClient.fetch(`*[_type == "pageHome"][0]{
     ...,
     "polaroidUrl": heroPolaroid.asset->url,
+    "backdropUrl": heroBackdrop.asset->url,
     "videoUrl": showcaseVideo.asset->url,
     "introImageUrl": introImage.asset->url,
     galleryPhotos[]{
@@ -23,25 +24,27 @@ try {
 // Fallback values in case Sanity document isn't published yet
 const siteTitle = settings?.title || 'DG PHOTOGRAPHY';
 const contactEmail = settings?.contactEmail || 'studio@portfolio.art';
+const contactPhone = settings?.contactPhone || '+389 72 303 764';
 const instagramUrl = settings?.instagramUrl || 'https://www.instagram.com/d_gorgiev_photo/';
 
 const heroTitle = home?.heroTitle || 'Dario Gorgiev';
 const heroSubtitle = home?.heroSubtitle || 'PHOTOGRAPHY';
 const heroDesc = home?.heroDescription || 'A personal portfolio showcasing my selected works.';
 const heroPolaroid = home?.polaroidUrl || '/images/portrait.jpg';
+const heroBackdrop = home?.backdropUrl || '/images/hero.jpg';
 
 const showcaseHeading = home?.showcaseHeading || 'Cinematic perspectives from the field';
 const showcaseCaption = home?.showcaseCaption || 'A short visual reel capturing the atmosphere and tone of my recent analog work.';
-const showcaseVideo = home?.videoUrl || '/images/showcase.mp4';
+const showcaseVideo = home?.videoUrl || '/images/video.mp4';
 
 const introHeading = home?.introHeading || 'Today I am presenting my curated portfolio, a collection of moments frozen in time.';
 const introImageUrl = home?.introImageUrl || '/images/portrait.jpg';
 const introCaption = home?.introImageCaption || "The photographer's camera, always ready for the next shot.";
-const introText1 = home?.introText1 || 'Photography is more than just pressing a button. It is the art of seeing. Every image in this collection represents hours of patience, waiting for the perfect light, the right expression, the decisive moment. A conventional portfolio shows you a flat list of images. This collection shows you terrain: ridges with heights, valleys with depths, and a horizon you can orbit.';
-const introText2 = home?.introText2 || 'It is the result of years of practice. Press the shutter for under a second, and it returns a memory accurate to half a micron, with true color, the lighting it was found in, and a place on the map.';
+const introText1 = home?.introText1 || 'Photography is more than just pressing a button; it is the art of seeing and preserving atmosphere. Every frame in this collection represents patience—waiting for the perfect light, the subtle gesture, and the quiet harmony between subject and space. Rather than a flat sequence of pictures, these series capture the tactile weight of each environment and moment.';
+const introText2 = home?.introText2 || 'Rooted in analog disciplines and refined through digital precision, each study explores texture, depth, and shadow. A single shutter release condenses natural light, genuine emotion, and the stillness of time into an enduring visual narrative.';
 
-const galleryHeading = home?.galleryHeading || 'One map of the visual world';
-const galleryDesc = home?.galleryDescription || 'Every photo is a story. Browse the collection below to explore different themes and subjects. From sweeping vistas to macro details. You can walk from lichen on a Cairngorm boulder to frost on a Helsinki window without leaving a square millimetre.';
+const galleryHeading = home?.galleryHeading || 'Selected Works & Studies';
+const galleryDesc = home?.galleryDescription || 'Every photo holds a story. Explore selected captures spanning natural landscapes, architecture, and fleeting moments from recent series.';
 const galleryPhotos = home?.galleryPhotos || [
   { src: '/images/photo-1.jpg', title: 'Frost & Fern' },
   { src: '/images/photo-2.jpg', title: 'Mountain Pass' },
@@ -94,7 +97,7 @@ const galleryPhotos = home?.galleryPhotos || [
             <div class="hero-panels-container">
                 <div class="panel panel-left torn-edges-mask" data-bg="/images/photo-1.jpg"></div>
                 <div class="panel panel-center">
-                    <div class="horizon-bg"></div>
+                    <div class="horizon-bg" style={`background-image: url('${heroBackdrop}');`}></div>
                     <div class="polaroid-wrapper">
                         <div class="polaroid-drop">
                             <div class="polaroid-frame">
@@ -121,7 +124,7 @@ const galleryPhotos = home?.galleryPhotos || [
             </div>
         </section>
 
-        <!-- Section 2: Video/Featured image -->
+        <!-- Section 2: Showcase (Video) -->
         <section id="showcase" class="section-dark" data-torn-top="#0b0b0b">
             <div class="featured-content">
                 <p class="eyebrow">SHOWCASE</p>
@@ -161,7 +164,7 @@ const galleryPhotos = home?.galleryPhotos || [
             </div>
         </section>
 
-        <!-- Section 4: The Gallery -->
+        <!-- Section 4: Gallery -->
         <section id="gallery" class="section-light">
             <div class="container">
                 <p class="section-num">GALLERY</p>
@@ -192,13 +195,13 @@ const galleryPhotos = home?.galleryPhotos || [
             </div>
         </section>
 
-        <!-- Section 5: Footer / Contact -->
+        <!-- Section 5: Contact / Footer -->
         <footer id="contact" class="section-dark footer-section footer-compact" data-torn-top="#0b0b0b">
             <div class="container footer-compact-container">
                 <div class="footer-left">
                     <span class="footer-label">Contact</span>
                     <a href={`mailto:${contactEmail}`} class="footer-link">{contactEmail}</a>
-                    <span class="footer-phone">+389 72 303 764</span>
+                    <span class="footer-phone">{contactPhone}</span>
                 </div>
                 <div class="footer-right">
                     <span class="footer-label">Social</span>

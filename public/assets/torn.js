@@ -86,7 +86,7 @@
     });
     ctx.restore();
   }
-  // a rectangle torn on all four sides (for article plates)
+  // a rectangle torn on all four sides (for photo and media plates)
   function rectScrap(x, y, w, h, seed, amp) {
     var a = amp == null ? 4 : amp;
     var top = line(x, y, x + w, y, { amp: a, seed: seed + 1, flip: true }),

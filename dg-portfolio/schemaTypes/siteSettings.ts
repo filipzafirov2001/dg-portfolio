@@ -18,6 +18,12 @@ export default defineType({
       type: 'string',
     }),
     defineField({
+      name: 'contactPhone',
+      title: 'Contact Phone Number',
+      type: 'string',
+      placeholder: '+389 72 303 764'
+    }),
+    defineField({
       name: 'instagramUrl',
       title: 'Instagram URL',
       type: 'url',
