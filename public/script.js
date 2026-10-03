@@ -6,7 +6,7 @@ const heroTimeline = gsap.timeline({
     scrollTrigger: {
         trigger: "#hero-intro",
         start: "top top",
-        end: "+=150%", // Pin for 150% of viewport height
+        end: "+=250%", // Pin longer for smoother transition
         pin: true,
         scrub: 1, // Smooth scrubbing
     }
@@ -65,6 +65,9 @@ heroTimeline.to(".scroll-down", {
     opacity: 0,
     ease: "power1.out"
 }, 0);
+
+// Add empty space at the end of the timeline to create 'hang time' before unpinning
+heroTimeline.to({}, { duration: 0.3 });
 
 // Setup initial state for main title container
 gsap.set(".main-title-container", {
