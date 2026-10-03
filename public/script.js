@@ -1,6 +1,25 @@
 gsap.registerPlugin(ScrollTrigger);
 ScrollTrigger.config({ ignoreMobileResize: true });
 
+// Hero scroll assist: once the visitor commits to opening (or closing) the panels,
+// a light snap finishes the motion so the hero never rests in a half-open state.
+const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const HERO_SNAP_THRESHOLD = 0.04; // share of total progress needed to commit to a direction
+let heroScrollDir = 1;
+
+function heroSnap(progress) {
+    const open = heroTimeline.labels.open / heroTimeline.duration();
+    // Fully closed, or inside the open "hang time" zone: let the visitor scroll freely
+    if (progress <= 0 || progress >= open) return progress;
+    if (heroScrollDir > 0) return progress > HERO_SNAP_THRESHOLD ? open : 0;
+    return progress < open - HERO_SNAP_THRESHOLD ? 0 : open;
+}
+
+// CSS `scroll-behavior: smooth` fights GSAP's snap tween, so suspend it while snapping
+function setNativeSmoothScroll(enabled) {
+    document.documentElement.style.scrollBehavior = enabled ? '' : 'auto';
+}
+
 // Hero Animation
 const heroTimeline = gsap.timeline({
     scrollTrigger: {
@@ -9,6 +28,16 @@ const heroTimeline = gsap.timeline({
         end: "+=250%", // Pin longer for smoother transition
         pin: true,
         scrub: 1, // Smooth scrubbing
+        onUpdate: (self) => { heroScrollDir = self.direction; },
+        snap: prefersReducedMotion ? false : {
+            snapTo: heroSnap,
+            duration: { min: 0.35, max: 0.9 },
+            delay: 0.1,
+            ease: "power2.inOut",
+            onStart: () => setNativeSmoothScroll(false),
+            onComplete: () => setNativeSmoothScroll(true),
+            onInterrupt: () => setNativeSmoothScroll(true)
+        }
     }
 });
 
@@ -65,6 +94,9 @@ heroTimeline.to(".scroll-down", {
     opacity: 0,
     ease: "power1.out"
 }, 0);
+
+// Mark the fully-open state (snap target for the scroll assist)
+heroTimeline.addLabel("open");
 
 // Add empty space at the end of the timeline to create 'hang time' before unpinning
 heroTimeline.to({}, { duration: 0.3 });
