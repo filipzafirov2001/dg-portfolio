@@ -215,7 +215,6 @@ canvas.canvas-drawn {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%);
     z-index: 20;
     /* Expand clip path to prevent cutting off shadow/rotated corners */
     clip-path: inset(-50px -50px -40px -50px);
@@ -230,7 +229,7 @@ canvas.canvas-drawn {
     background-color: var(--bg-light);
     padding: 10px 10px 40px 10px;
     box-shadow: 0 15px 35px rgba(0,0,0,0.4);
-    transform: rotate(4deg); /* Tilted clockwise */
+    
     width: 250px;
     display: flex;
     flex-direction: column;

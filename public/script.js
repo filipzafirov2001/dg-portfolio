@@ -70,6 +70,8 @@ heroTimeline.to(".scroll-down", {
 heroTimeline.to({}, { duration: 0.3 });
 
 // Setup initial state for main title container
+gsap.set(".polaroid-frame", { rotation: 4 });
+gsap.set(".polaroid-wrapper", { xPercent: -50, yPercent: -50 });
 gsap.set(".main-title-container", {
     scale: 1.1,
     autoAlpha: 0,
