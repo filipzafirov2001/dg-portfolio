@@ -57,7 +57,7 @@ const fallbackArchive = [
             transform: translateY(0) !important;
         }
         .gallery-page-header {
-            padding: 8rem 0 3rem;
+            padding: 2rem 0 3rem;
             text-align: center;
         }
         .gallery-page-header h1 {
@@ -68,6 +68,11 @@ const fallbackArchive = [
             font-family: var(--font-sans);
             color: #666;
             letter-spacing: 0.05em;
+        }
+        @media (max-width: 768px) {
+            .gallery-page-header {
+                padding: 1rem 0 2rem;
+            }
         }
     </style>
 </head>
