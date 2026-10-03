@@ -638,6 +638,37 @@ canvas.canvas-drawn {
     position: relative;
 }
 
+/* Frosted Glass View Button on hover */
+.torn-content::after {
+    content: "VIEW";
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    color: #fff;
+    padding: 0.6rem 2rem;
+    font-family: var(--font-sans);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s cubic-bezier(0.16, 1, 0.3, 1), transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 20;
+    border-radius: 40px;
+}
+
+.gallery-item:hover .torn-content::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+
 .gallery-caption {
     font-size: 0.75rem;
     color: #666;
