@@ -69,40 +69,58 @@ function initTornPaper() {
 
     // 2. Setup standard torn paper canvas overlay for gallery images
     function drawPlates() {
-        var d = dprOf();
+        function dprOf() { return Math.min(2, window.devicePixelRatio || 1); }
         
-        // Target all images in torn-content
-        document.querySelectorAll('.torn-content').forEach(function(container, idx) {
-            var img = container.querySelector('img');
-            if (!img) return;
+        document.querySelectorAll('.torn-content').forEach((fig, i) => {
+            let seed = 300 + i * 11;
+            let media = fig.querySelector('img, video');
+            if (!media || fig.querySelector('canvas')) return; // Already drawn
+            let isVideo = media.tagName.toLowerCase() === 'video';
             
-            var fixedSeed = 500 + idx * 42; // Consistent seed per image
-            var lastW = 0;
-
+            let isGallery = fig.closest('#gallery') !== null;
+            
+            let c = document.createElement("canvas"); 
+            c.className = "plate-canvas"; 
+            c.setAttribute("aria-hidden", "true");
+            c.style.position = 'absolute';
+            c.style.top = '0'; c.style.left = '0'; c.style.zIndex = '0';
+            
+            media.style.opacity = '0.001';
+            media.style.position = 'absolute';
+            media.style.width = '100%';
+            fig.style.position = 'relative';
+            fig.style.background = 'transparent';
+            fig.style.boxShadow = 'none';
+            fig.style.padding = '0';
+            
+            let parent = fig.parentElement;
+            if (parent && (parent.classList.contains('torn-frame') || parent.classList.contains('torn-frame-inline'))) {
+            }
+    
+            fig.appendChild(c);
+            
+            let rafId;
+            let lastW = 0;
+    
             function draw() {
-                var w = container.clientWidth;
-                var h = (img.naturalHeight / img.naturalWidth) * w;
-                if (!w || !h) return; // Wait until loaded
-                if (w === lastW) return; // Skip if width hasn't changed (prevents mobile scroll flash)
+                let mediaW = isVideo ? media.videoWidth : media.naturalWidth;
+                let mediaH = isVideo ? media.videoHeight : media.naturalHeight;
+                if (!mediaW) return; // Not loaded yet
+                
+                var d = dprOf(), w = fig.clientWidth, h = w * mediaH / mediaW;
+                if (w === 0) return; // Not visible yet
+                if (w === lastW && !isVideo) return; // Skip if width hasn't changed (allow video to redraw via RAF)
                 lastW = w;
-
-                // If already has canvas, remove it before drawing a new one on resize
-                var existingCanvas = container.querySelector('.plate-canvas');
-                if (existingCanvas) existingCanvas.remove();
-
-                var c = document.createElement("canvas");
-                c.className = 'plate-canvas';
-                container.appendChild(c);
                 
-                var pad = 12; // padding for torn edge
-                var seed = fixedSeed;
-                var amp = 4;
-                
-                var seam = 1.3;
-                var fibres = 0.35;
-                var fibreLen = 0.65;
-                var shadow = { blur: 12, dx: 2, dy: 4, alpha: 0.20 };
-                var over = 2;
+                var pad = isGallery ? 12 : 36;
+                var amp = isGallery ? 4.0 : 3.6;
+                var seam = isGallery ? 1.3 : 2.6;
+                var fibres = isGallery ? 0.35 : 0.55;
+                var fibreLen = isGallery ? 0.65 : 1.0;
+                var shadow = isGallery 
+                    ? { blur: 12, dx: 2, dy: 4, alpha: 0.20 }
+                    : { blur: 22, dx: 4, dy: 8, alpha: 0.28 };
+                var over = isGallery ? 2 : 4;
                 
                 c.width = (w + 2 * pad) * d; c.height = (h + 2 * pad) * d; 
                 c.style.width = (w + 2 * pad) + "px"; c.style.height = (h + 2 * pad) + "px";
@@ -112,28 +130,43 @@ function initTornPaper() {
                 c.style.marginTop = "0";
                 
                 var x = c.getContext("2d"); 
-                x.setTransform(d, 0, 0, d, 0, 0); 
-                x.clearRect(0, 0, w + 2 * pad, h + 2 * pad);
-                
                 var s = Torn.rectScrap(pad, pad, w, h, seed, amp);
-                Torn.scrap(x, s.outline, s.edges, function (cc) { 
-                    cc.drawImage(img, pad - over, pad - over, w + over * 2, h + over * 2); 
-                }, { 
-                    dpr: d, 
-                    seam: seam, 
-                    fibres: fibres, 
-                    fibreLen: fibreLen,
-                    shadow: shadow, 
-                    seed: seed + 5 
-                });
-                container.style.height = h + "px";
+                
+                function renderFrame() {
+                    x.setTransform(d, 0, 0, d, 0, 0); 
+                    x.clearRect(0, 0, w + 2 * pad, h + 2 * pad);
+                    Torn.scrap(x, s.outline, s.edges, function (cc) { 
+                        cc.drawImage(media, pad - over, pad - over, w + over * 2, h + over * 2); 
+                    }, { 
+                        dpr: d, 
+                        seam: seam, 
+                        fibres: fibres, 
+                        fibreLen: fibreLen,
+                        shadow: shadow, 
+                        seed: seed + 5 
+                    });
+                    
+                    if (isVideo) {
+                        rafId = requestAnimationFrame(renderFrame);
+                    }
+                }
+                
+                if (rafId) cancelAnimationFrame(rafId);
+                renderFrame();
+                
+                fig.style.height = h + "px"; // Important to keep layout correct
                 c.classList.add("canvas-drawn");
             }
-            if (img.complete) draw(); else img.addEventListener("load", draw);
+            
+            if (isVideo) {
+                if (media.readyState >= 2) draw(); else media.addEventListener("loadeddata", draw);
+            } else {
+                if (media.complete) draw(); else media.addEventListener("load", draw);
+            }
             window.addEventListener('resize', draw);
         });
     }
-    
+
     drawPlates();
 }
 
