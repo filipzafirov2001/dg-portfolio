@@ -621,11 +621,11 @@ canvas.canvas-drawn {
 }
 
 @media (max-width: 768px) {
-    .gallery-grid {
+    .gallery-grid, .gallery-grid.gallery-grid-3 {
         column-count: 2;
         column-gap: 1.5rem;
     }
-    .gallery-grid .gallery-item {
+    .gallery-grid .gallery-item, .gallery-grid.gallery-grid-3 .gallery-item {
         margin-bottom: 2rem;
     }
 }
