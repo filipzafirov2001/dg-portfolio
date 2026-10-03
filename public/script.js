@@ -539,4 +539,10 @@ window.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
-window.addEventListener('load', () => document.body.classList.remove('loading-state'));
+window.addEventListener('load', () => {
+    if (document.querySelector('.panel-center')) {
+        setTimeout(() => document.body.classList.remove('loading-state'), 400);
+    } else {
+        document.body.classList.remove('loading-state');
+    }
+});

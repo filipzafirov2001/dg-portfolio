@@ -106,14 +106,14 @@ const fallbackArchive = [
                     {archivePhotos.length > 0 ? (
                         archivePhotos.map((photo) => (
                             <div class="gallery-item">
-                                <div class="torn-content"><img src={urlFor(photo.image || photo).width(1200).url()} alt={photo.title || "Archive"} /></div>
+                                <div class="torn-content"><img src={urlFor(photo.image || photo).width(1200).url()} alt={photo.title || "Archive"} /><div class="view-overlay-btn frosted-glass">VIEW</div></div>
                                 <p class="gallery-caption">{photo.title}</p>
                             </div>
                         ))
                     ) : (
                         fallbackArchive.map((photo) => (
                             <div class="gallery-item">
-                                <div class="torn-content"><img src={photo.src} alt={photo.title} /></div>
+                                <div class="torn-content"><img src={photo.src} alt={photo.title} /><div class="view-overlay-btn frosted-glass">VIEW</div></div>
                                 <p class="gallery-caption">{photo.title}</p>
                             </div>
                         ))
