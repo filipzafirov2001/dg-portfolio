@@ -17,21 +17,21 @@ export default defineType({
       title: 'Main Title',
       type: 'string',
       group: 'hero',
-      initialValue: 'Dario Gorgiev'
+      placeholder: 'Dario Gorgiev'
     }),
     defineField({
       name: 'heroSubtitle',
       title: 'Subtitle',
       type: 'string',
       group: 'hero',
-      initialValue: 'PHOTOGRAPHY'
+      placeholder: 'PHOTOGRAPHY'
     }),
     defineField({
       name: 'heroDescription',
       title: 'Description',
       type: 'string',
       group: 'hero',
-      initialValue: 'A personal portfolio showcasing my selected works.'
+      placeholder: 'A personal portfolio showcasing my selected works.'
     }),
     defineField({
       name: 'heroPolaroid',
@@ -47,14 +47,14 @@ export default defineType({
       title: 'Showcase Heading',
       type: 'string',
       group: 'showcase',
-      initialValue: 'Cinematic perspectives from the field'
+      placeholder: 'Cinematic perspectives from the field'
     }),
     defineField({
       name: 'showcaseCaption',
       title: 'Showcase Caption',
       type: 'text',
       group: 'showcase',
-      initialValue: 'A short visual reel capturing the atmosphere and tone of my recent analog work.'
+      placeholder: 'A short visual reel capturing the atmosphere and tone of my recent analog work.'
     }),
     defineField({
       name: 'showcaseVideo',
@@ -70,7 +70,7 @@ export default defineType({
       title: 'Introduction Heading',
       type: 'string',
       group: 'intro',
-      initialValue: 'Today I am presenting my curated portfolio, a collection of moments frozen in time.'
+      placeholder: 'Today I am presenting my curated portfolio, a collection of moments frozen in time.'
     }),
     defineField({
       name: 'introImage',
@@ -84,21 +84,21 @@ export default defineType({
       title: 'Image Caption',
       type: 'string',
       group: 'intro',
-      initialValue: 'The photographer\'s camera, always ready for the next shot.'
+      placeholder: 'The photographer\'s camera, always ready for the next shot.'
     }),
     defineField({
       name: 'introText1',
       title: 'Paragraph 1',
       type: 'text',
       group: 'intro',
-      initialValue: 'Photography is more than just pressing a button. It is the art of seeing. Every image in this collection represents hours of patience, waiting for the perfect light, the right expression, the decisive moment. A conventional portfolio shows you a flat list of images. This collection shows you terrain: ridges with heights, valleys with depths, and a horizon you can orbit.'
+      placeholder: 'Photography is more than just pressing a button. It is the art of seeing. Every image in this collection represents hours of patience, waiting for the perfect light, the right expression, the decisive moment. A conventional portfolio shows you a flat list of images. This collection shows you terrain: ridges with heights, valleys with depths, and a horizon you can orbit.'
     }),
     defineField({
       name: 'introText2',
       title: 'Paragraph 2',
       type: 'text',
       group: 'intro',
-      initialValue: 'It is the result of years of practice. Press the shutter for under a second, and it returns a memory accurate to half a micron, with true color, the lighting it was found in, and a place on the map.'
+      placeholder: 'It is the result of years of practice. Press the shutter for under a second, and it returns a memory accurate to half a micron, with true color, the lighting it was found in, and a place on the map.'
     }),
 
     // --- GALLERY ---
@@ -107,14 +107,14 @@ export default defineType({
       title: 'Gallery Heading',
       type: 'string',
       group: 'gallery',
-      initialValue: 'One map of the visual world'
+      placeholder: 'One map of the visual world'
     }),
     defineField({
       name: 'galleryDescription',
       title: 'Gallery Description',
       type: 'text',
       group: 'gallery',
-      initialValue: 'Every photo is a story. Browse the collection below to explore different themes and subjects. From sweeping vistas to macro details. You can walk from lichen on a Cairngorm boulder to frost on a Helsinki window without leaving a square millimetre.'
+      placeholder: 'Every photo is a story. Browse the collection below to explore different themes and subjects. From sweeping vistas to macro details. You can walk from lichen on a Cairngorm boulder to frost on a Helsinki window without leaving a square millimetre.'
     }),
     defineField({
       name: 'galleryPhotos',

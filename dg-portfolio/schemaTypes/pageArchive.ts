@@ -9,13 +9,13 @@ export default defineType({
       name: 'title',
       title: 'Page Title',
       type: 'string',
-      initialValue: 'Complete Archive',
+      placeholder: 'Complete Archive',
     }),
     defineField({
       name: 'subtitle',
       title: 'Page Subtitle',
       type: 'string',
-      initialValue: 'A comprehensive collection of all works.',
+      placeholder: 'A comprehensive collection of all works.',
     }),
     defineField({
       name: 'photos',

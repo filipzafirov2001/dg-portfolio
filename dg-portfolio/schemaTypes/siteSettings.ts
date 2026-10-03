@@ -10,7 +10,7 @@ export default defineType({
       title: 'Site Title',
       type: 'string',
       description: 'Used in the nav bar and browser tab',
-      initialValue: 'DG PHOTOGRAPHY'
+      placeholder: 'DG PHOTOGRAPHY'
     }),
     defineField({
       name: 'contactEmail',
